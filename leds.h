@@ -2,7 +2,7 @@
 #define _LEDS_H_
 
 typedef enum {
-	LED_IND,
+//	LED_IND,
 	LED_PUMP
 }leds_t;
 

@@ -2,16 +2,17 @@
 #include "leds.h"
 
 #define LED_R (1<<0)
-#define LED_G (1<<6)
+//#define LED_G (1<<6)
 
 static unsigned char map_leds(leds_t led)
 {
-	return (led == LED_IND)? LED_G : LED_R;
+//	return (led == LED_IND)? LED_G : LED_R;
+	return LED_R;
 }
 
 void leds_init(void)
 {
-	P1DIR |= LED_R + LED_G;
+	P1DIR |= LED_R/* + LED_G*/;
 	P1OUT = 0x00;
 }
 

@@ -1,6 +1,8 @@
 
 #include "timer.h"
-#include "leds.h"
+//#include "leds.h"
+#include "display.h"
+
 #include <msp430g2553.h>
 
 typedef enum {
@@ -57,7 +59,8 @@ __interrupt void main_timer(void)
 		return;
 		
 	jiffies++;
-	led_toggle(LED_IND);
+//	led_toggle(LED_IND);
+	display_test();
 
 	if (timer.stat != TIMER_RUN)
 		return;

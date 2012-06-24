@@ -20,6 +20,7 @@
 #include "leds.h"
 #include "buttons.h"
 #include "uart.h"
+#include "display.h"
 
 #define D_THEMP_ON 8 //Delta for pumping ON
 #define D_THEMP_OFF 3 // Delta for pumping OFF
@@ -132,14 +133,15 @@ void sm_loop(void)
 
 /* Main Function*/
 void main(void)
-{ 
-    WDTCTL = WDTPW + WDTHOLD;                 // Stop watchdog timer
+{
+	WDTCTL = WDTPW + WDTHOLD;                 // Stop watchdog timer
 
 	timer_init();
     uart_init();
 	thermistor_init();
 	leds_init();
 	buttons_init();
+	display_init();
 	
 	sm_init();
                                
