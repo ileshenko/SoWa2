@@ -128,7 +128,8 @@ void sm_loop(void)
 		themps_update();
 		uart_report();
 		old_jiffies = jiffies;
-	}	
+	}
+	display_pulse();	
 }
 
 /* Main Function*/

@@ -2,6 +2,8 @@
 #define _DISPLAY_H_
 
 void display_init(void);
+void display_pulse(void);
+
 void display_test(void);
 
 
