@@ -25,13 +25,23 @@
 #define D_THEMP_ON 8 //Delta for pumping ON
 #define D_THEMP_OFF 3 // Delta for pumping OFF
 
+#define DEMO
+#ifdef DEMO
+
+#define IDLE_MIN_TIME  0, 20
+#define PUMPING_MIN_TIME  0, 5
+#define IDLE_MAX_TIME    0, 30
+#define PUMPING_MAX_TIME 0, 60
+
+#else 
 #define IDLE_MIN_TIME  0, 60
 #define PUMPING_MIN_TIME  0, 1
 #define IDLE_MAX_TIME   24,0
 #define PUMPING_MAX_TIME 0,600
+#endif
 
 heater_sm_t curr_state;
-
+display_stat_t display_state;
 static void sm_set(heater_sm_t state)
 {
 	switch (state)
@@ -128,6 +138,9 @@ void sm_loop(void)
 		themps_update();
 		uart_report();
 		old_jiffies = jiffies;
+		display_stat(display_state++);
+		if (display_state >= DISP_LAST)
+			display_state = DISP_NONE;
 	}
 	display_pulse();	
 }
@@ -145,6 +158,7 @@ void main(void)
 	display_init();
 	
 	sm_init();
+	display_state = display_state;
                                
     _EINT();
     for (;;)

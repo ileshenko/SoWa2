@@ -1,4 +1,5 @@
 #include <msp430g2553.h>
+#include "thermistor.h"
 #include "display.h"
 
 /*
@@ -47,7 +48,7 @@
 
 const struct {
 	unsigned char p1, p2;
-} digimap[10] = {
+} digimap[] = {
 	{ D_C      , D_A | D_B | D_D | D_E | D_F }, // 0
 	{ D_C      , D_B                         }, // 1
 	{ D_G      , D_A | D_B | D_D | D_E       }, // 2
@@ -58,6 +59,8 @@ const struct {
 	{ D_C      , D_A | D_B                   }, // 7
 	{ D_C | D_G, D_A | D_B | D_D | D_E | D_F }, // 8
 	{ D_C | D_G, D_A | D_B | D_D       | D_F }, // 9
+	{       D_G,                           0 }, // -
+	{         0,                           0 }, // " "
 };
 
 
@@ -77,16 +80,17 @@ void display_init(void)
 	
 }
 
+static char dd[2] = {8,1};
+static char point;
+
 inline static void show_digit(char digit, char idx)
 {
 	P1OUT &= ~DP1_MSK;
 	P2OUT &= ~DP2_MSK;
 	
 	P1OUT |= digimap[digit].p1;
-	P2OUT |= digimap[digit].p2 | (idx ? LFT : RGH);
+	P2OUT |= digimap[digit].p2 | (idx ? LFT : (RGH | (point ? D_P : 0))) ;
 }
-
-static char dd[2] = {8,1};
 
 void display_pulse(void)
 {
@@ -95,6 +99,39 @@ void display_pulse(void)
 	show_digit(dd[idx], idx);
 	idx = !idx;
 }
+
+void display_set(char val)
+{
+	point = val & 0x80;
+	val &= 0x7f;
+	
+	if (val > 99)
+		dd[0] = dd[1] = 10;
+	else
+	{
+		dd[0] = val%10;
+		dd[1] = val /10;
+	}
+}
+
+void display_stat(display_stat_t stat)
+{
+	switch (stat)
+	{
+	case DISP_NONE:
+		dd[0] = dd[1] = 10;
+		break;
+	case DISP_DOWN:
+		display_set(-temp_bottom);
+		break;
+	case DISP_UP:
+		display_set(temp_up);
+		break;
+	default:
+			dd[0] = dd[1] = 11;
+	}
+}
+
 
 void display_test(void)
 {

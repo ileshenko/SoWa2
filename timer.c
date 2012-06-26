@@ -60,7 +60,7 @@ __interrupt void main_timer(void)
 		
 	jiffies++;
 //	led_toggle(LED_IND);
-	display_test();
+//	display_set(jiffies%102);
 
 	if (timer.stat != TIMER_RUN)
 		return;
