@@ -2,10 +2,11 @@
 #include "thermistor.h"
 
 //#include "ntc2233600.c"
-#include "ntc1523950.c"
+//#include "ntc1523950.c"
+#include "ntc1523950_gnd_471.c"
 
 #define BSIZE 16
-int *ntc; 
+const int *ntc; 
 
 int adc_buff[BSIZE];
 #define ADC10CTL_INCH(port) (((unsigned int)port)<<12)
