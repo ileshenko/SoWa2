@@ -103,7 +103,8 @@ void display_pulse(void)
 void display_set(char val)
 {
 	point = val & 0x80;
-	val &= 0x7f;
+	if (point)
+	    val =-val;
 	
 	if (val > 99)
 		dd[0] = dd[1] = 10;

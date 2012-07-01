@@ -3,7 +3,8 @@
 
 //#include "ntc2233600.c"
 //#include "ntc1523950.c"
-#include "ntc1523950_gnd_471.c"
+//#include "ntc1523950_gnd_471.c"
+#include "ntc1523950_gnd_461.c"
 
 #define BSIZE 16
 const int *ntc; 
@@ -43,9 +44,9 @@ static inline int thermistor_ntc(unsigned int raw)
 	for (ret = 0; ret <100; ret++)
 	{
 		if (ntc[ret]>=raw)
-			return ret;
+			return 100 - ret;
 	}
-	return ret;
+	return 0;
 }
 
 int themp_get(sensor_t sensor)
