@@ -27,38 +27,38 @@
 
 /* port 1 */
 
-#define D_C PIN(6) 
+#define D_D PIN(6) 
 #define D_G PIN(7) 
 
-#define DP1_MSK ( D_C | D_G )
+#define DP1_MSK ( D_G | D_D )
 
 /* port 2 */
 #define D_A PIN(2) 
-#define D_B PIN(0) 
-#define D_D PIN(5) 
-#define D_E PIN(4) 
-#define D_F PIN(1)
+#define D_B PIN(1)
+#define D_C PIN(3)
+#define D_E PIN(5) 
+#define D_F PIN(0) 
 
-#define D_P PIN(3)
+#define D_P PIN(4) 
 
 #define LFT PIN(7) 
 #define RGH PIN(6) 
 
-#define DP2_MSK (D_A | D_B | D_D | D_E | D_F | D_P | LFT | RGH ) 
+#define DP2_MSK (D_A | D_B | D_C| D_E | D_F | D_P | LFT | RGH ) 
 
 const struct {
 	unsigned char p1, p2;
 } digimap[] = {
-	{ D_C      , D_A | D_B | D_D | D_E | D_F }, // 0
-	{ D_C      , D_B                         }, // 1
-	{ D_G      , D_A | D_B | D_D | D_E       }, // 2
-	{ D_C | D_G, D_A | D_B | D_D             }, // 3
-	{ D_C | D_G,       D_B             | D_F }, // 4
-	{ D_C | D_G, D_A       | D_D       | D_F }, // 5
-	{ D_C | D_G, D_A       | D_D | D_E | D_F }, // 6
-	{ D_C      , D_A | D_B                   }, // 7
-	{ D_C | D_G, D_A | D_B | D_D | D_E | D_F }, // 8
-	{ D_C | D_G, D_A | D_B | D_D       | D_F }, // 9
+	{ D_D      , D_A | D_B | D_C | D_E | D_F }, // 0
+	{         0, D_B       | D_C             }, // 1
+	{ D_D | D_G, D_A | D_B       | D_E       }, // 2
+	{ D_D | D_G, D_A | D_B | D_C             }, // 3
+	{       D_G,       D_B | D_C       | D_F }, // 4
+	{ D_D | D_G, D_A       | D_C       | D_F }, // 5
+	{ D_D | D_G, D_A       | D_C | D_E | D_F }, // 6
+	{         0, D_A | D_B | D_C             }, // 7
+	{ D_D | D_G, D_A | D_B | D_C | D_E | D_F }, // 8
+	{ D_D | D_G, D_A | D_B | D_C       | D_F }, // 9
 	{       D_G,                           0 }, // -
 	{         0,                           0 }, // " "
 };
@@ -73,11 +73,6 @@ void display_init(void)
 	
 	P2SEL &= ~(PIN(7) + PIN(6));
 	P2SEL2 &= ~(PIN(7) + PIN(6));
-	
-//	P2OUT |= PIN(7) + PIN(6);
-//	P2OUT |= LFT;
-	
-	
 }
 
 static char dd[2] = {8,1};
@@ -90,6 +85,8 @@ inline static void show_digit(char digit, char idx)
 	
 	P1OUT |= digimap[digit].p1;
 	P2OUT |= digimap[digit].p2 | (idx ? LFT : (RGH | (point ? D_P : 0))) ;
+//	P2OUT |= D_C;
+//	P2OUT |= PIN(7) + PIN(6);
 }
 
 void display_pulse(void)
@@ -103,8 +100,7 @@ void display_pulse(void)
 void display_set(char val)
 {
 	point = val & 0x80;
-	if (point)
-	    val =-val;
+	val &= 0x7f;
 	
 	if (val > 99)
 		dd[0] = dd[1] = 10;
@@ -123,7 +119,7 @@ void display_stat(display_stat_t stat)
 		dd[0] = dd[1] = 10;
 		break;
 	case DISP_DOWN:
-		display_set(-temp_bottom);
+		display_set(0x80 | temp_bottom);
 		break;
 	case DISP_UP:
 		display_set(temp_up);
