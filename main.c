@@ -22,10 +22,10 @@
 #include "uart.h"
 #include "display.h"
 
-#define D_THEMP_ON 8 //Delta for pumping ON
-#define D_THEMP_OFF 3 // Delta for pumping OFF
+#define D_THEMP_ON 18 //Delta for pumping ON
+#define D_THEMP_OFF 10 // Delta for pumping OFF
 
-#define DEMO
+//#define DEMO
 #ifdef DEMO
 
 #define IDLE_MIN_TIME  0, 20
