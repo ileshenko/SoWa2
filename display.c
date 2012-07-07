@@ -10,20 +10,7 @@
  *   d    p
  * */
 
-
-#define PORT(n) (n<<8)
 #define PIN(n) (1<<n)
-/*
-#define D_A (PORT(2) | PIN(0)) 
-#define D_B (PORT(2) | PIN(0)) 
-#define D_C (PORT(2) | PIN(2)) 
-#define D_D (PORT(2) | PIN(3)) 
-#define D_E (PORT(2) | PIN(4)) 
-#define D_F (PORT(2) | PIN(5))
- 
-#define D_G (PORT(1) | PIN(6)) 
-#define D_P (PORT(1) | PIN(7))
-*/
 
 /* port 1 */
 
