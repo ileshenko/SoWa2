@@ -62,7 +62,7 @@ void display_init(void)
 	P2SEL2 &= ~(PIN(7) + PIN(6));
 }
 
-static char dd[2] = {8,1};
+static char dd[2] = {0,0};
 static char point;
 
 inline static void show_digit(char digit, char idx)
