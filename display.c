@@ -50,6 +50,32 @@ const struct {
 	{         0,                           0 }, // " "
 };
 
+#define sleep for (i=0; i<0x8fff; i++);
+
+static void show_fan(void)
+{
+	volatile unsigned int i;
+	P1OUT &= ~DP1_MSK;
+	P2OUT &= ~DP2_MSK;
+
+	P2OUT = D_A + RGH + LFT;
+	sleep;
+	P2OUT = D_B + RGH + LFT;
+	sleep;
+	P2OUT = D_C + RGH + LFT;
+	sleep;
+	P1OUT |= D_D;
+	sleep;
+	P1OUT &= ~D_D;
+	P2OUT = D_E + RGH + LFT;
+	sleep;
+	P2OUT = D_F + RGH + LFT;
+	sleep;
+	P1OUT |= D_G;
+	sleep;
+	P2OUT = D_P + RGH + LFT;
+	sleep;
+}
 
 void display_init(void)
 {
@@ -60,6 +86,8 @@ void display_init(void)
 	
 	P2SEL &= ~(PIN(7) + PIN(6));
 	P2SEL2 &= ~(PIN(7) + PIN(6));
+
+	show_fan();
 }
 
 static char dd[2] = {0,0};
@@ -72,8 +100,8 @@ inline static void show_digit(char digit, char idx)
 	
 	P1OUT |= digimap[digit].p1;
 	P2OUT |= digimap[digit].p2 | (idx ? LFT : (RGH | (point ? D_P : 0))) ;
-//	P2OUT |= D_C;
-//	P2OUT |= PIN(7) + PIN(6);
+//	P2OUT |= D_A;
+//	P2OUT |= RGH;
 }
 
 void display_pulse(void)
