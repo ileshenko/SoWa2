@@ -23,7 +23,7 @@
 #include "display.h"
 
 #define D_THEMP_ON 18 //Delta for pumping ON
-#define D_THEMP_OFF 10 // Delta for pumping OFF
+#define D_THEMP_OFF 16 // Delta for pumping OFF
 
 //#define DEMO
 #ifdef DEMO
