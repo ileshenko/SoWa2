@@ -12,6 +12,7 @@ typedef enum {
 	DISP_NONE,
 	DISP_DOWN,
 	DISP_UP,
+	DISP_CTL,
 	DISP_LAST
 } display_stat_t;
 

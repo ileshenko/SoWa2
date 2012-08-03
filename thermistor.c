@@ -6,21 +6,23 @@
 //#include "ntc1523950_gnd_471.c"
 #include "ntc1523950_gnd_461.c"
 
+#define BIT(bit) (1<<bit)
+
 #define BSIZE 16
 const int *ntc; 
 
 int adc_buff[BSIZE];
 #define ADC10CTL_INCH(port) (((unsigned int)port)<<12)
 
-int temp_up, temp_bottom;
+int temp_up, temp_bottom, temp_ctl;
 
 void thermistor_init(void)
 {
     ADC10CTL0 = ADC10SHT_2 + MSC + ADC10ON; // TODO ??? SHT2? IE???
-    ADC10AE0 = (1<<UP_PORT) + (1<<BOTTOM_PORT); // ADC ports option select
+    ADC10AE0 = BIT(UP_PORT) + BIT(BOTTOM_PORT)+ BIT(CTL_PORT); // ADC ports option select
     ADC10DTC1 = BSIZE;                           // Conversions count
     
-    temp_up = temp_bottom = 0;
+    temp_up = temp_bottom = temp_ctl = 0;
     
     ntc=ntc1523950;
 //    ntc=ntc2233600;
@@ -49,11 +51,14 @@ static inline int thermistor_ntc(unsigned int raw)
 	return 0;
 }
 
+static const char sensor_map[3] = {UP_PORT, BOTTOM_PORT, CTL_PORT };
+
 int themp_get(sensor_t sensor)
 {
-	char port = (sensor == SEN_UP) ? UP_PORT : BOTTOM_PORT;
+	char port;
 	unsigned int raw_val;
-	
+
+	port = sensor_map[sensor];
     ADC10CTL0 &= ~ENC;
     while (ADC10CTL1 & BUSY);               // Wait if ADC10 core is active
 
@@ -71,8 +76,9 @@ int themp_get(sensor_t sensor)
 
 void themps_update(void)
 {
-	temp_up = themp_get(SEN_UP);
+    temp_up = themp_get(SEN_UP);
     temp_bottom = themp_get(SEN_BOTTOM);
+    temp_ctl = themp_get(SEN_CTL);
 }
 
 int themp_delta_get(void)

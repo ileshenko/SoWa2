@@ -16,6 +16,7 @@ void uart_init(void)
   	DCOCTL = CALDCO_1MHZ;  		    // Set DCO step + modulation
 #endif
   	
+	/* Port 1.2 (Rx) may be overriden by ADC if we need output only */
 	P1SEL |= BIT1 + BIT2; //select RXD and TXD for UART
 	P1SEL2 |= BIT1 + BIT2; //select RXD and TXD for UART
 	
@@ -60,6 +61,8 @@ void uart_report(void)
 	buf = cat_ul(buf, temp_up);
 	buf = cat_str(buf, "\t");
 	buf = cat_ul(buf, temp_bottom);
+	buf = cat_str(buf, "\t");
+	buf = cat_ul(buf, temp_ctl);
 	buf = cat_str(buf, "\r\n");
 	
 	*buf = 0; 

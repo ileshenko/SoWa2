@@ -3,12 +3,14 @@
 
 #define UP_PORT 4
 #define BOTTOM_PORT 5
+#define CTL_PORT 1
 
-extern int temp_up, temp_bottom;
+extern int temp_up, temp_bottom, temp_ctl;
 
 typedef enum {
-	SEN_UP,
-	SEN_BOTTOM
+	SEN_UP = 0,
+	SEN_BOTTOM = 1,
+	SEN_CTL = 2 /* third sensor for investigation purpoces */
 } sensor_t;
 
 void thermistor_init(void);

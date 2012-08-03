@@ -139,6 +139,9 @@ void display_stat(display_stat_t stat)
 	case DISP_UP:
 		display_set(temp_up);
 		break;
+	case DISP_CTL:
+		display_set(temp_ctl);
+		break;
 	default:
 			dd[0] = dd[1] = 11;
 	}
